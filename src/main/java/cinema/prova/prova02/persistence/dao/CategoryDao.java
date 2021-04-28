@@ -34,6 +34,29 @@ public class CategoryDao {
         }
     }
 
+    public Category findById(int id){
+        String sql = "select * from category where id=?";
+
+        try{
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setLong(1, id);
+            ResultSet category = stmt.executeQuery();
+
+            Category category1 = new Category();
+            while(category.next()){
+
+                category1.setId(category.getInt("id"));
+                category1.setName(category.getString("nome"));
+                category1.setDescription(category.getString("description"));
+
+            }
+            return category1;
+
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Category> listCategory(){
 
         String sql = "select * from category";

@@ -1,6 +1,7 @@
 package cinema.prova.prova02.persistence.dao;
 
 import cinema.prova.prova02.factory.ConnectionFactory;
+import cinema.prova.prova02.persistence.model.Category;
 import cinema.prova.prova02.persistence.model.Film;
 
 import java.sql.Connection;
@@ -24,7 +25,8 @@ public class FilmeDao {
                 "minutes integer," +
                 "diretor varchar(50)," +
                 "idCategory int," +
-                "foreign key (idCategory) references category(id) ";
+                "foreign key (idCategory) references category(id) " +
+                ");";
 
         try{
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -53,7 +55,11 @@ public class FilmeDao {
                 film.setName(films.getString("nome"));
                 film.setMinutes(films.getInt("minutes"));
                 film.setDiretor(films.getString("diretor"));
-                //film.setCategory(films.getInt("idCategory"));
+
+                CategoryDao categoryDao = new CategoryDao();
+                Category category = categoryDao.findById(films.getInt("idCategory"));
+                film.setCategory(category);
+
                 filmsList.add(film);
             }
             return filmsList;
